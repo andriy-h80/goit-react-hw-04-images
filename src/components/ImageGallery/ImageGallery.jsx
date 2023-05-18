@@ -9,7 +9,7 @@ import Modal from '../Modal/Modal';
 import PropTypes from 'prop-types';
 
 export default function ImageGallery({ imageSearchName }) {
-    const [searchName, setSearchName] = useState(null);
+    const [searchName, setSearchName] = useState('');
     const [images, setImages] = useState([]);
     const [error, setError] = useState(null);
     const [status, setStatus] = useState('idle');
@@ -30,7 +30,7 @@ export default function ImageGallery({ imageSearchName }) {
             getImages(imageSearchName, page)
             .then(images => {
                 setImages(prevImages => (page === 1 ? images.hits : [...prevImages, ...images.hits]));
-                setTotalPages(Math.floor(images.totalHits / 12));
+                setTotalPages(Math.ceil(images.totalHits / 12));
                 setStatus('resolved');
             })    
             .catch(error => {
@@ -41,7 +41,8 @@ export default function ImageGallery({ imageSearchName }) {
     }, [searchName, page, imageSearchName]) 
 
     const handleLoadMore = () => {
-        setPage(prevPage => (prevPage + 1 ));
+        setPage(prev => (prev + 1 ));
+        setSearchName(imageSearchName);
     };
 
     const receivedModalData = modalData => {
@@ -66,7 +67,7 @@ export default function ImageGallery({ imageSearchName }) {
         }
 
         if (images.length === 0) {
-            return <ErrorImageView message={`Sorry, we can't find ${this.props.imageSearchName}`} />;
+            return <ErrorImageView message={`Sorry, we can't find ${imageSearchName}`} />;
         }
 
         if (status === 'resolved') {
