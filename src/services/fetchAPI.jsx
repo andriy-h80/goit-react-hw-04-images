@@ -10,7 +10,7 @@ const getImages = async (imageSearchName, page = 1) => {
     }
     return await Promise.reject(
         new Error(
-            `Sorry, we can't find ${this.props.imageSearchName}`
+            `Sorry, we can't find ${imageSearchName}`
         )
     );
 };
